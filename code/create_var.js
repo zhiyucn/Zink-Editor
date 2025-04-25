@@ -51,12 +51,36 @@ var CustomVariableManager = (function() {
         },
         
         showDialog: function() {
+            var dialogContent = dialog.querySelector('.variable-dialog');
             dialog.classList.add('active');
+            
+            // 设置初始状态
+            dialogContent.style.transition = 'none';
+            dialogContent.style.opacity = '0';
+            dialogContent.style.transform = 'scale(0.5)';
+            
+            // 强制重绘
+            void dialogContent.offsetWidth;
+            
+            // 启用动画
+            dialogContent.style.transition = 'all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            dialogContent.style.opacity = '1';
+            dialogContent.style.transform = 'scale(1)';
+            
             dialog.querySelector('.variable-dialog-input').focus();
         },
         
         hideDialog: function() {
-            dialog.classList.remove('active');
+            var dialogContent = dialog.querySelector('.variable-dialog');
+            dialogContent.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            dialogContent.style.opacity = '0';
+            dialogContent.style.transform = 'scale(0.5)';
+            
+            setTimeout(() => {
+                dialog.classList.remove('active');
+                dialogContent.style.opacity = '1';
+                dialogContent.style.transform = 'scale(1)';
+            }, 500);
         },
         
         onCreateClick: function() {
@@ -68,14 +92,19 @@ var CustomVariableManager = (function() {
                 return;
             }
             
-            // 创建变量
-            workspace.createVariable(varName);
-            input.value = '';
-            this.hideDialog();
-            
-            // 刷新工具箱
-            if (workspace.toolbox_) {
-                workspace.toolbox_.refreshSelection();
+            try {
+                // 创建变量
+                workspace.createVariable(varName);
+                input.value = '';
+                this.hideDialog();
+                
+                // 刷新工具箱
+                if (workspace.toolbox_) {
+                    workspace.toolbox_.refreshSelection();
+                }
+            } catch (e) {
+                console.error('创建变量失败:', e);
+                alert('创建变量失败: ' + e.message);
             }
         }
     };

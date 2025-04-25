@@ -6,12 +6,12 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1280,
     height: 720,
-    icon: path.join(__dirname, 'icon.png'), // 设置窗口图标
-    title: 'DoIt!',                // 修改窗口标题
+    title: 'Zink Editor',                // 修改窗口标题
     autoHideMenuBar: true,                // 隐藏工具栏（按 Alt 可临时显示）
     webPreferences: {
       nodeIntegration: true               // 允许渲染进程使用 Node.js
     }
+    
   });
 
   // 加载本地 HTML 文件

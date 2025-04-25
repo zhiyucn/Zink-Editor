@@ -165,6 +165,25 @@ function exportWorkspace() {
   }
 
 // 其他功能函数
+async function runCode() {
+    try {
+        const code = Blockly.Python.workspaceToCode(workspace);
+        const blob = new Blob([code], {type: 'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = url;
+        document.body.appendChild(iframe);
+        setTimeout(() => {
+            document.body.removeChild(iframe);
+            URL.revokeObjectURL(url);
+        }, 1000);
+    } catch (error) {
+        console.error('运行失败:', error);
+        alert('运行代码时出错: ' + error.message);
+    }
+}
+
 async function copyCode() {
     try {
         const code = Blockly.Python.workspaceToCode(workspace);
@@ -245,6 +264,7 @@ function setupEventListeners() {
     // 其他功能
     document.getElementById('copy-code-btn').addEventListener('click', copyCode);
     document.getElementById('theme-btn').addEventListener('click', toggleTheme);
+    document.getElementById('run-btn').addEventListener('click', runCode);
     
     //Tab功能
     document.querySelectorAll('.tab-buttons .tab-button').forEach(button => {

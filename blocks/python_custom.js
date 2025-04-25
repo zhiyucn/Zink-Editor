@@ -18,6 +18,27 @@ python.pythonGenerator.forBlock['import'] = function(block, generator) {
     return code;
 };
 
+Blockly.Blocks['import_from'] = {
+    init: function() {
+    this.appendDummyInput()
+       .appendField("从")
+       .appendField(new Blockly.FieldTextInput("math"), "lib")
+       .appendField("导入") 
+       .appendField(new Blockly.FieldTextInput("*"), "import");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(250);
+    this.setTooltip("导入外置库，但是只导入指定的函数或类");
+    this.setHelpUrl("");
+    }
+}
+python.pythonGenerator.forBlock['import_from'] = function(block, generator) {
+    var text_lib = block.getFieldValue('lib');
+    generator.addImport('from '+ text_lib +' import '+ block.getFieldValue('import'));
+    var code = ''; 
+    return code;
+}
+
 Blockly.Blocks['code'] = {
     init: function() {
     this.appendDummyInput()
